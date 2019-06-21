@@ -17,7 +17,10 @@ import sys
 
 
 def kill_all(app_name):
-    cmd = 'ps -e | grep "%s" | grep -v grep | awk \'{print $1}\'' % app_name
+    if sys.platform == 'win32':
+        cmd = 'taskkill /f /im {}.exe'.format(app_name)
+    else:
+        cmd = 'ps -e | grep "%s" | grep -v grep | awk \'{print $1}\'' % app_name
     ret = subprocess.check_output(cmd, shell=True)
     if ret:
         for line in ret.decode().split():
